@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BusScanner — Find Cheap Bus Tickets</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="navbar">
+  <a class="logo" href="index.html">
+    <div class="logo-icon">🚌</div>
+    <span class="logo-text">Bus<span>Scanner</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#" class="active">Buses</a></li>
+    <li><a href="#">Trains</a></li>
+    <li><a href="#">Car Hire</a></li>
+    <li><a href="#">Hotels</a></li>
+  </ul>
+  <div class="nav-actions">
+    <button class="btn-ghost">Help</button>
+    <button class="btn-login">Log in</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <h1 class="hero-title">Millions of cheap bus tickets.<br>One search.</h1>
+    <p class="hero-sub">Compare RedBus, AbhiBus & 100+ operators instantly</p>
+
+    <!-- SEARCH CARD -->
+    <div class="search-card" id="searchCard">
+      <div class="search-tabs">
+        <button class="tab active" data-tab="bus">🚌 Bus</button>
+        <button class="tab" data-tab="train">🚆 Train</button>
+        <button class="tab" data-tab="shuttle">🚐 Shuttle</button>
+      </div>
+      <div class="search-body">
+        <div class="trip-type-row">
+          <label class="radio-label"><input type="radio" name="tripType" value="oneway" checked> One-way</label>
+          <label class="radio-label"><input type="radio" name="tripType" value="return"> Return</label>
+        </div>
+        <div class="search-row">
+          <!-- FROM -->
+          <div class="field-group from-group">
+            <label class="field-label">From</label>
+            <div class="field-wrap" id="fromWrap">
+              <span class="fi">📍</span>
+              <input type="text" id="fromInput" class="field-input" placeholder="City or station" autocomplete="off">
+              <div class="autocomplete-dropdown" id="fromDropdown"></div>
+              <div class="swap-btn" id="swapBtn" title="Swap cities">⇄</div>
+            </div>
+          </div>
+          <!-- TO -->
+          <div class="field-group to-group">
+            <label class="field-label">To</label>
+            <div class="field-wrap" id="toWrap">
+              <span class="fi">📍</span>
+              <input type="text" id="toInput" class="field-input" placeholder="City or station" autocomplete="off">
+              <div class="autocomplete-dropdown" id="toDropdown"></div>
+            </div>
+          </div>
+          <!-- DATE -->
+          <div class="field-group date-group">
+            <label class="field-label">Depart</label>
+            <div class="field-wrap">
+              <span class="fi">📅</span>
+              <input type="date" id="dateInput" class="field-input">
+            </div>
+          </div>
+          <!-- RETURN DATE (hidden initially) -->
+          <div class="field-group date-group" id="returnDateGroup" style="display:none">
+            <label class="field-label">Return</label>
+            <div class="field-wrap">
+              <span class="fi">📅</span>
+              <input type="date" id="returnDateInput" class="field-input">
+            </div>
+          </div>
+          <!-- PASSENGERS -->
+          <div class="field-group pax-group">
+            <label class="field-label">Passengers</label>
+            <div class="field-wrap pax-wrap" id="paxWrap">
+              <span class="fi">👤</span>
+              <span class="pax-label" id="paxLabel">1 Adult</span>
+              <div class="pax-dropdown" id="paxDropdown">
+                <div class="pax-row">
+                  <div><strong>Adults</strong><small>18+</small></div>
+                  <div class="pax-counter">
+                    <button class="pax-btn minus" data-type="adult">−</button>
+                    <span id="adultCount">1</span>
+                    <button class="pax-btn plus" data-type="adult">+</button>
+                  </div>
+                </div>
+                <div class="pax-row">
+                  <div><strong>Children</strong><small>2–17</small></div>
+                  <div class="pax-counter">
+                    <button class="pax-btn minus" data-type="child">−</button>
+                    <span id="childCount">0</span>
+                    <button class="pax-btn plus" data-type="child">+</button>
+                  </div>
+                </div>
+                <button class="btn-done-pax" id="paxDone">Done</button>
+              </div>
+            </div>
+          </div>
+          <!-- SEARCH BUTTON -->
+          <button class="btn-search" id="searchBtn">
+            <span>🔍</span> Search buses
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- POPULAR ROUTES -->
+<section class="main-section">
+  <div class="container">
+    <h2 class="section-title">Popular routes</h2>
+    <div class="routes-grid">
+      <a class="route-card" href="#" data-from="Chennai" data-to="Bangalore">
+        <div class="route-flag">🏙️</div>
+        <div class="route-info"><strong>Chennai → Bangalore</strong><span class="route-price">from ₹299</span></div>
+      </a>
+      <a class="route-card" href="#" data-from="Chennai" data-to="Pondicherry">
+        <div class="route-flag">🏖️</div>
+        <div class="route-info"><strong>Chennai → Pondicherry</strong><span class="route-price">from ₹149</span></div>
+      </a>
+      <a class="route-card" href="#" data-from="Chennai" data-to="Coimbatore">
+        <div class="route-flag">🌄</div>
+        <div class="route-info"><strong>Chennai → Coimbatore</strong><span class="route-price">from ₹349</span></div>
+      </a>
+      <a class="route-card" href="#" data-from="Chennai" data-to="Hyderabad">
+        <div class="route-flag">🕌</div>
+        <div class="route-info"><strong>Chennai → Hyderabad</strong><span class="route-price">from ₹499</span></div>
+      </a>
+      <a class="route-card" href="#" data-from="Chennai" data-to="Madurai">
+        <div class="route-flag">🌊</div>
+        <div class="route-info"><strong>Chennai → Madurai</strong><span class="route-price">from ₹249</span></div>
+      </a>
+      <a class="route-card" href="#" data-from="Bangalore" data-to="Mysore">
+        <div class="route-flag">🏰</div>
+        <div class="route-info"><strong>Bangalore → Mysore</strong><span class="route-price">from ₹199</span></div>
+      </a>
+    </div>
+
+    <!-- PROMO BANNER -->
+    <div class="promo-banner">
+      <div>
+        <h3>🎉 Weekend Flash Sale — Up to 40% off</h3>
+        <p>Book before Sunday midnight. Valid on select routes.</p>
+      </div>
+      <button class="btn-promo">Grab the deal →</button>
+    </div>
+
+    <!-- WHY US -->
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <h4>Lightning fast</h4>
+        <p>Search RedBus & AbhiBus simultaneously in under 2 seconds</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">💰</div>
+        <h4>Best price guaranteed</h4>
+        <p>We compare every operator so you never overpay</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🛡️</div>
+        <h4>Secure booking</h4>
+        <p>PCI-compliant payments. Full refund on cancellations</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📱</div>
+        <h4>mTicket support</h4>
+        <p>Digital tickets on your phone — no printout needed</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="logo" style="margin-bottom:12px">
+        <div class="logo-icon">🚌</div>
+        <span class="logo-text" style="color:#fff">Bus<span>Scanner</span></span>
+      </div>
+      <p>We compare bus tickets from hundreds of operators so you always find the best deal — fast, free, and simple.</p>
+    </div>
+    <div>
+      <h4>Company</h4>
+      <a href="#">About us</a><a href="#">Careers</a><a href="#">Press</a><a href="#">Blog</a>
+    </div>
+    <div>
+      <h4>Help</h4>
+      <a href="#">Help Centre</a><a href="#">Contact us</a><a href="#">Privacy Policy</a><a href="#">Terms</a>
+    </div>
+    <div>
+      <h4>Explore</h4>
+      <a href="#">Popular routes</a><a href="#">Bus operators</a><a href="#">City guides</a><a href="#">Travel tips</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 BusScanner. All rights reserved.</span>
+    <div class="footer-links">
+      <a href="#">🇮🇳 India</a><a href="#">INR ₹</a><a href="#">English</a>
+    </div>
+  </div>
+</footer>
+
+<script src="js/search.js"></script>
+</body>
+</html>

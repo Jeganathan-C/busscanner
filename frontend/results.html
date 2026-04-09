@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bus Results — BusScanner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="results-page">
+
+<!-- STICKY SEARCH NAV -->
+<nav class="navbar results-nav">
+  <a class="logo" href="index.html">
+    <div class="logo-icon">🚌</div>
+    <span class="logo-text">Bus<span>Scanner</span></span>
+  </a>
+  <!-- Compact search bar -->
+  <div class="compact-search" id="compactSearch">
+    <div class="cs-field" id="cs-from">Chennai</div>
+    <div class="cs-arrow">→</div>
+    <div class="cs-field" id="cs-to">Bangalore</div>
+    <div class="cs-sep">|</div>
+    <div class="cs-field" id="cs-date">Tomorrow</div>
+    <div class="cs-sep">|</div>
+    <div class="cs-field" id="cs-pax">1 adult</div>
+    <button class="cs-edit" id="csEditBtn">Edit</button>
+  </div>
+  <div class="nav-actions">
+    <button class="btn-ghost">Help</button>
+    <button class="btn-login">Log in</button>
+  </div>
+</nav>
+
+<!-- EXPANDABLE SEARCH (hidden by default on results page) -->
+<div class="search-expand-panel" id="searchExpandPanel" style="display:none">
+  <div class="search-card inline-search">
+    <div class="search-body">
+      <div class="search-row">
+        <div class="field-group from-group">
+          <label class="field-label">From</label>
+          <div class="field-wrap">
+            <span class="fi">📍</span>
+            <input type="text" id="fromInput2" class="field-input" autocomplete="off">
+            <div class="autocomplete-dropdown" id="fromDropdown2"></div>
+            <div class="swap-btn" id="swapBtn2">⇄</div>
+          </div>
+        </div>
+        <div class="field-group to-group">
+          <label class="field-label">To</label>
+          <div class="field-wrap">
+            <span class="fi">📍</span>
+            <input type="text" id="toInput2" class="field-input" autocomplete="off">
+            <div class="autocomplete-dropdown" id="toDropdown2"></div>
+          </div>
+        </div>
+        <div class="field-group date-group">
+          <label class="field-label">Depart</label>
+          <div class="field-wrap">
+            <span class="fi">📅</span>
+            <input type="date" id="dateInput2" class="field-input">
+          </div>
+        </div>
+        <div class="field-group pax-group">
+          <label class="field-label">Passengers</label>
+          <div class="field-wrap">
+            <span class="fi">👤</span>
+            <input type="text" id="paxInput2" class="field-input" value="1 Adult" readonly>
+          </div>
+        </div>
+        <button class="btn-search" id="searchBtn2">🔍 Search</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RESULTS LAYOUT -->
+<div class="results-layout" id="resultsLayout">
+  <!-- SIDEBAR FILTERS -->
+  <aside class="filters-sidebar" id="filtersSidebar">
+    <div class="filters-header">
+      <span>Filters</span>
+      <button class="btn-reset" id="resetFilters">Reset all</button>
+    </div>
+
+    <!-- SORT (mobile) -->
+    <div class="filter-section mobile-sort">
+      <div class="filter-section-title">Sort by</div>
+      <select class="sort-select" id="sortSelectMobile">
+        <option value="best">Best</option>
+        <option value="price">Cheapest</option>
+        <option value="duration">Fastest</option>
+        <option value="departure">Earliest</option>
+        <option value="rating">Top rated</option>
+      </select>
+    </div>
+
+    <!-- PRICE RANGE -->
+    <div class="filter-section">
+      <div class="filter-section-title">Price per person</div>
+      <div class="price-range-wrap">
+        <div class="price-range-labels">
+          <span id="priceMinLabel">₹0</span>
+          <span id="priceMaxLabel">₹2000</span>
+        </div>
+        <input type="range" id="priceRange" min="0" max="2000" value="2000" class="range-slider">
+        <div class="range-value">Up to ₹<span id="priceRangeVal">2000</span></div>
+      </div>
+    </div>
+
+    <!-- DEPARTURE TIME -->
+    <div class="filter-section">
+      <div class="filter-section-title">Departure time</div>
+      <div class="time-grid">
+        <label class="time-chip"><input type="checkbox" value="early" class="dep-time-filter"> 🌙 Before 6am</label>
+        <label class="time-chip"><input type="checkbox" value="morning" class="dep-time-filter"> 🌅 6am–12pm</label>
+        <label class="time-chip"><input type="checkbox" value="afternoon" class="dep-time-filter"> ☀️ 12pm–6pm</label>
+        <label class="time-chip"><input type="checkbox" value="evening" class="dep-time-filter"> 🌆 After 6pm</label>
+      </div>
+    </div>
+
+    <!-- BUS TYPE -->
+    <div class="filter-section">
+      <div class="filter-section-title">Bus type</div>
+      <label class="filter-check"><input type="checkbox" value="SL" class="bus-type-filter"> 🛏 Sleeper</label>
+      <label class="filter-check"><input type="checkbox" value="ST" class="bus-type-filter"> 💺 Seater</label>
+      <label class="filter-check"><input type="checkbox" value="VOLVO" class="bus-type-filter"> 🚌 Volvo</label>
+    </div>
+
+    <!-- AMENITIES -->
+    <div class="filter-section">
+      <div class="filter-section-title">Amenities</div>
+      <label class="filter-check"><input type="checkbox" value="wifi" class="amenity-filter"> 📶 WiFi</label>
+      <label class="filter-check"><input type="checkbox" value="usb" class="amenity-filter"> 🔌 USB charging</label>
+      <label class="filter-check"><input type="checkbox" value="ac" class="amenity-filter"> ❄️ Air conditioned</label>
+      <label class="filter-check"><input type="checkbox" value="sleeper" class="amenity-filter"> 🛏 Sleeper berth</label>
+    </div>
+
+    <!-- SOURCE -->
+    <div class="filter-section">
+      <div class="filter-section-title">Booking via</div>
+      <label class="filter-check source-check">
+        <input type="checkbox" value="redbus" class="source-filter" checked>
+        <span class="source-badge redbus">redBus</span>
+      </label>
+      <label class="filter-check source-check">
+        <input type="checkbox" value="abhibus" class="source-filter" checked>
+        <span class="source-badge abhibus">AbhiBus</span>
+      </label>
+    </div>
+  </aside>
+
+  <!-- MAIN RESULTS -->
+  <main class="results-main">
+    <!-- Sort bar -->
+    <div class="sort-bar">
+      <div class="results-meta" id="resultsMeta">
+        <div class="skeleton-line" style="width:200px;height:20px"></div>
+      </div>
+      <div class="sort-pills">
+        <button class="sort-pill active" data-sort="best">Best</button>
+        <button class="sort-pill" data-sort="price">Cheapest</button>
+        <button class="sort-pill" data-sort="duration">Fastest</button>
+        <button class="sort-pill" data-sort="departure">Earliest</button>
+        <button class="sort-pill" data-sort="rating">Top rated</button>
+      </div>
+    </div>
+
+    <!-- Date strip (price calendar) -->
+    <div class="date-strip" id="dateStrip"></div>
+
+    <!-- Results container -->
+    <div id="resultsContainer">
+      <!-- Loading skeletons -->
+      <div class="loading-state" id="loadingState">
+        <div class="loading-msg">
+          <div class="spinner"></div>
+          <span>Searching RedBus & AbhiBus...</span>
+        </div>
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- SEAT SELECTION MODAL -->
+<div class="modal-overlay" id="seatModal" style="display:none">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3 id="modalTitle">Select your seat</h3>
+      <button class="modal-close" id="modalClose">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="seat-modal-layout">
+        <div class="seat-deck-panel">
+          <div class="deck-tabs" id="deckTabs"></div>
+          <div class="seat-map-wrap" id="seatMapWrap">
+            <div class="seat-loading">Loading seat map...</div>
+          </div>
+          <div class="seat-legend">
+            <span class="legend-item available">Available</span>
+            <span class="legend-item booked">Booked</span>
+            <span class="legend-item ladies">Ladies</span>
+            <span class="legend-item selected">Selected</span>
+          </div>
+        </div>
+        <div class="seat-summary-panel">
+          <h4>Your selection</h4>
+          <div id="selectedSeatsInfo" class="selected-seats-info">
+            <p class="no-seat-msg">Tap a seat to select it</p>
+          </div>
+          <div class="boarding-section">
+            <label class="field-label">Boarding point</label>
+            <select class="styled-select" id="boardingSelect"></select>
+            <label class="field-label" style="margin-top:12px">Dropping point</label>
+            <select class="styled-select" id="droppingSelect"></select>
+          </div>
+          <div class="fare-summary" id="fareSummary" style="display:none">
+            <div class="fare-row"><span>Seat fare</span><span id="seatFare">₹0</span></div>
+            <div class="fare-row"><span>Convenience fee</span><span>₹30</span></div>
+            <div class="fare-row total"><span>Total</span><span id="totalFare">₹30</span></div>
+          </div>
+          <button class="btn-proceed" id="proceedBtn" disabled>Proceed to book</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="js/booking.js"></script>
+<script src="js/results.js"></script>
+</body>
+</html>

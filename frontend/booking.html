@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book Ticket — BusScanner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="booking-page">
+
+<nav class="navbar">
+  <a class="logo" href="index.html">
+    <div class="logo-icon">🚌</div>
+    <span class="logo-text">Bus<span>Scanner</span></span>
+  </a>
+  <div class="nav-actions">
+    <button class="btn-ghost">Help</button>
+    <button class="btn-login">Log in</button>
+  </div>
+</nav>
+
+<div class="booking-layout" id="bookingLayout">
+  <!-- LEFT: FORM -->
+  <div>
+    <!-- STEPS -->
+    <div class="step-bar">
+      <div class="step active"><div class="step-num">1</div> Passenger details</div>
+      <div class="step-line"></div>
+      <div class="step"><div class="step-num">2</div> Review</div>
+      <div class="step-line"></div>
+      <div class="step"><div class="step-num">3</div> Payment</div>
+    </div>
+
+    <!-- TRIP SUMMARY MINI -->
+    <div class="form-card" id="tripSummaryCard">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+        <div>
+          <div style="font-size:20px;font-weight:900;color:#2e2e38;letter-spacing:-0.3px" id="tripRouteLabel">Chennai → Bangalore</div>
+          <div style="font-size:13px;color:#68697f;font-weight:600;margin-top:4px" id="tripMeta">—</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:13px;color:#9b9fad;font-weight:600">Seats</div>
+          <div style="font-size:15px;font-weight:800;color:#111236" id="tripSeats">—</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PASSENGER DETAILS -->
+    <div class="form-card" id="passengerForm">
+      <h3>👤 Passenger details</h3>
+      <div id="passengerFields"></div>
+    </div>
+
+    <!-- CONTACT DETAILS -->
+    <div class="form-card">
+      <h3>📱 Contact details</h3>
+      <p style="font-size:13px;color:#68697f;margin-bottom:16px;font-weight:500">Your ticket and booking confirmation will be sent here</p>
+      <div class="form-grid">
+        <div class="form-group full">
+          <label class="form-label">Email address</label>
+          <input type="email" class="form-input" id="contactEmail" placeholder="you@example.com">
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Mobile number</label>
+          <input type="tel" class="form-input" id="contactPhone" placeholder="+91 98765 43210">
+        </div>
+      </div>
+    </div>
+
+    <!-- PAYMENT OPTIONS -->
+    <div class="form-card" id="paymentCard">
+      <h3>💳 Payment method</h3>
+      <div class="payment-options" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px">
+        <label class="payment-option" style="border:2px solid #0770e3;background:#e8f3ff;border-radius:10px;padding:14px;cursor:pointer;display:flex;align-items:center;gap:10px;font-weight:700">
+          <input type="radio" name="payMethod" value="upi" checked style="accent-color:#0770e3"> 📲 UPI
+        </label>
+        <label class="payment-option" style="border:2px solid #dde1e7;border-radius:10px;padding:14px;cursor:pointer;display:flex;align-items:center;gap:10px;font-weight:700">
+          <input type="radio" name="payMethod" value="card" style="accent-color:#0770e3"> 💳 Card
+        </label>
+        <label class="payment-option" style="border:2px solid #dde1e7;border-radius:10px;padding:14px;cursor:pointer;display:flex;align-items:center;gap:10px;font-weight:700">
+          <input type="radio" name="payMethod" value="netbanking" style="accent-color:#0770e3"> 🏦 Net banking
+        </label>
+        <label class="payment-option" style="border:2px solid #dde1e7;border-radius:10px;padding:14px;cursor:pointer;display:flex;align-items:center;gap:10px;font-weight:700">
+          <input type="radio" name="payMethod" value="wallet" style="accent-color:#0770e3"> 👛 Wallet
+        </label>
+      </div>
+      <!-- UPI input -->
+      <div id="upiSection">
+        <div class="form-group">
+          <label class="form-label">UPI ID</label>
+          <input type="text" class="form-input" id="upiId" placeholder="yourname@upi">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT: BOOKING SUMMARY -->
+  <div>
+    <div class="booking-summary">
+      <h4>Booking summary</h4>
+      <div class="summary-route" id="summaryRoute">Chennai → Bangalore</div>
+      <div class="summary-detail" id="summaryDetail">Loading…</div>
+      <div class="summary-divider"></div>
+      <div id="summarySeats"></div>
+      <div class="summary-divider"></div>
+      <div class="summary-row"><span>Seat fare</span><span id="summarySeatFare">₹0</span></div>
+      <div class="summary-row"><span>Convenience fee</span><span>₹30</span></div>
+      <div class="summary-row"><span>GST (5%)</span><span id="summaryGst">₹0</span></div>
+      <div class="summary-row total"><span>Total</span><span id="summaryTotal">₹30</span></div>
+      <button class="btn-pay" id="payBtn">🔒 Pay & Confirm</button>
+      <p style="font-size:11px;color:#9b9fad;text-align:center;margin-top:10px;font-weight:600">🔒 Secured by 256-bit encryption</p>
+    </div>
+
+    <div style="background:#fff;border:2px solid #dde1e7;border-radius:12px;padding:16px;margin-top:14px">
+      <div style="font-size:13px;font-weight:800;color:#2e2e38;margin-bottom:10px">🛡️ Cancellation policy</div>
+      <div style="font-size:12px;color:#68697f;line-height:1.7">
+        ✅ Free cancellation up to 24 hours before departure<br>
+        ⚠️ 25% fee for cancellations 12–24 hours before<br>
+        ❌ No refund within 12 hours of departure
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRMATION OVERLAY (shown after successful booking) -->
+<div id="confirmationOverlay" style="display:none">
+  <nav class="navbar"><a class="logo" href="index.html"><div class="logo-icon">🚌</div><span class="logo-text">Bus<span>Scanner</span></span></a></nav>
+  <div class="confirmation-content">
+    <div class="success-animation">✅</div>
+    <h2>Booking Confirmed!</h2>
+    <p>Your ticket has been sent to your email and phone.</p>
+
+    <div class="ticket-card">
+      <div class="ticket-pnr">PNR Number</div>
+      <div class="ticket-pnr-val" id="confirmPnr">—</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div><div style="font-size:11px;color:#9b9fad;font-weight:700;margin-bottom:4px">ROUTE</div><div style="font-weight:800;color:#2e2e38" id="confirmRoute">—</div></div>
+        <div><div style="font-size:11px;color:#9b9fad;font-weight:700;margin-bottom:4px">DATE</div><div style="font-weight:800;color:#2e2e38" id="confirmDate">—</div></div>
+        <div><div style="font-size:11px;color:#9b9fad;font-weight:700;margin-bottom:4px">SEATS</div><div style="font-weight:800;color:#2e2e38" id="confirmSeats">—</div></div>
+        <div><div style="font-size:11px;color:#9b9fad;font-weight:700;margin-bottom:4px">OPERATOR</div><div style="font-weight:800;color:#2e2e38" id="confirmOperator">—</div></div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+      <a href="index.html" style="background:#0770e3;color:#fff;padding:12px 28px;border-radius:10px;text-decoration:none;font-weight:800;font-size:15px">🔍 Search again</a>
+      <button onclick="window.print()" style="background:#fff;color:#0770e3;padding:12px 28px;border-radius:10px;border:2px solid #0770e3;font-weight:800;font-size:15px;cursor:pointer;font-family:inherit">🖨️ Print ticket</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const API_BASE = 'http://localhost:3000/api';
+let bookingData = null;
+
+function init() {
+  try {
+    const raw = localStorage.getItem('busscanner_booking');
+    if (!raw) { window.location.href = 'index.html'; return; }
+    bookingData = JSON.parse(raw);
+  } catch { window.location.href = 'index.html'; return; }
+
+  populateTripSummary();
+  renderPassengerFields();
+  renderBookingSummary();
+  setupPaymentOptions();
+  document.getElementById('payBtn').addEventListener('click', handlePayment);
+}
+
+function populateTripSummary() {
+  const { trip, query, seats } = bookingData;
+  document.getElementById('tripRouteLabel').textContent = `${query.fromName} → ${query.toName}`;
+  document.getElementById('summaryRoute').textContent   = `${query.fromName} → ${query.toName}`;
+  document.getElementById('tripMeta').textContent = `${trip.operator.name} · ${trip.bus.type} · ${trip.departure.time} – ${trip.arrival.time} · ${formatDate(query.date)}`;
+  document.getElementById('summaryDetail').textContent  = `${trip.operator.name} · ${trip.departure.time} – ${trip.arrival.time} · ${formatDate(query.date)}`;
+  document.getElementById('tripSeats').textContent = seats.map(s => s.number).join(', ');
+}
+
+function renderPassengerFields() {
+  const { seats } = bookingData;
+  const container = document.getElementById('passengerFields');
+  container.innerHTML = seats.map((seat, i) => `
+    <div style="margin-bottom:20px;padding-bottom:20px;border-bottom:${i < seats.length-1 ? '1.5px solid #f1f2f8' : 'none'}">
+      <div style="font-size:13px;font-weight:800;color:#68697f;margin-bottom:12px">PASSENGER ${i+1} · SEAT ${seat.number}</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">First name</label>
+          <input type="text" class="form-input pax-fname" placeholder="First name" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Last name</label>
+          <input type="text" class="form-input pax-lname" placeholder="Last name" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Age</label>
+          <input type="number" class="form-input pax-age" placeholder="Age" min="1" max="120" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Gender</label>
+          <select class="form-input pax-gender">
+            <option>Male</option><option>Female</option><option>Other</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderBookingSummary() {
+  const { seats, total } = bookingData;
+  const seatFare = seats.reduce((s, seat) => s + seat.fare, 0);
+  const gst      = Math.round(seatFare * 0.05);
+  const grand    = seatFare + 30 + gst;
+
+  document.getElementById('summarySeats').innerHTML = seats.map(s =>
+    `<div class="summary-row"><span>Seat ${s.number}</span><span>₹${s.fare}</span></div>`
+  ).join('');
+  document.getElementById('summarySeatFare').textContent = `₹${seatFare}`;
+  document.getElementById('summaryGst').textContent      = `₹${gst}`;
+  document.getElementById('summaryTotal').textContent    = `₹${grand}`;
+
+  bookingData.grandTotal = grand;
+}
+
+function setupPaymentOptions() {
+  document.querySelectorAll('input[name="payMethod"]').forEach(radio => {
+    radio.addEventListener('change', () => {
+      document.querySelectorAll('.payment-option').forEach(opt => {
+        opt.style.borderColor = '#dde1e7';
+        opt.style.background  = '#fff';
+      });
+      radio.closest('.payment-option').style.borderColor = '#0770e3';
+      radio.closest('.payment-option').style.background  = '#e8f3ff';
+      document.getElementById('upiSection').style.display = radio.value === 'upi' ? 'block' : 'none';
+    });
+  });
+}
+
+function collectPassengers() {
+  const fnames  = [...document.querySelectorAll('.pax-fname')];
+  const lnames  = [...document.querySelectorAll('.pax-lname')];
+  const ages    = [...document.querySelectorAll('.pax-age')];
+  const genders = [...document.querySelectorAll('.pax-gender')];
+  return bookingData.seats.map((seat, i) => ({
+    seatNumber: seat.number,
+    name:       `${fnames[i].value.trim()} ${lnames[i].value.trim()}`,
+    age:        parseInt(ages[i].value),
+    gender:     genders[i].value,
+  }));
+}
+
+function validateForm() {
+  const fnames = [...document.querySelectorAll('.pax-fname')];
+  const ages   = [...document.querySelectorAll('.pax-age')];
+  const email  = document.getElementById('contactEmail').value.trim();
+  const phone  = document.getElementById('contactPhone').value.trim();
+
+  for (const f of fnames) {
+    if (!f.value.trim()) { f.classList.add('error'); f.focus(); showToast('Please fill in all passenger names', 'error'); return false; }
+    f.classList.remove('error');
+  }
+  for (const a of ages) {
+    if (!a.value || a.value < 1) { a.classList.add('error'); a.focus(); showToast('Please enter valid ages', 'error'); return false; }
+    a.classList.remove('error');
+  }
+  if (!email || !email.includes('@')) { document.getElementById('contactEmail').classList.add('error'); showToast('Please enter a valid email', 'error'); return false; }
+  if (!phone || phone.replace(/\D/g,'').length < 10) { document.getElementById('contactPhone').classList.add('error'); showToast('Please enter a valid phone number', 'error'); return false; }
+  return true;
+}
+
+async function handlePayment() {
+  if (!validateForm()) return;
+
+  const payBtn = document.getElementById('payBtn');
+  payBtn.textContent = '⏳ Processing payment…';
+  payBtn.disabled = true;
+
+  const passengers = collectPassengers();
+  const payMethod  = document.querySelector('input[name="payMethod"]:checked')?.value;
+
+  try {
+    // Step 1: Block seats
+    const blockRes = await fetch(`${API_BASE}/booking/block`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        tripId:            bookingData.trip.id,
+        seats:             bookingData.seats,
+        boardingPointId:   bookingData.boarding,
+        droppingPointId:   bookingData.dropping,
+        passengerDetails:  passengers,
+      }),
+    });
+    const blockData = await blockRes.json();
+    if (!blockData.success) throw new Error(blockData.error || 'Seat blocking failed');
+
+    // Simulate payment processing (in real integration, redirect to payment gateway)
+    await new Promise(r => setTimeout(r, 1500));
+
+    // Step 2: Confirm booking
+    const confirmRes = await fetch(`${API_BASE}/booking/confirm`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        blockKey:       blockData.blockKey || blockData.blockId,
+        tripId:         bookingData.trip.id,
+        paymentDetails: { mode: payMethod, transactionId: `TXN${Date.now()}` },
+      }),
+    });
+    const confirmData = await confirmRes.json();
+    if (!confirmData.success) throw new Error(confirmData.error || 'Booking confirmation failed');
+
+    // Show confirmation
+    showConfirmation(confirmData.booking);
+    localStorage.removeItem('busscanner_booking');
+  } catch (err) {
+    payBtn.textContent = '🔒 Pay & Confirm';
+    payBtn.disabled = false;
+    showToast(err.message, 'error');
+  }
+}
+
+function showConfirmation(booking) {
+  const overlay = document.getElementById('confirmationOverlay');
+  overlay.style.cssText = 'display:block;position:fixed;inset:0;background:#f1f2f8;z-index:500;overflow-y:auto';
+
+  document.getElementById('confirmPnr').textContent      = booking.pnr || 'BK' + Date.now();
+  document.getElementById('confirmRoute').textContent    = `${bookingData.query.fromName} → ${bookingData.query.toName}`;
+  document.getElementById('confirmDate').textContent     = formatDate(bookingData.query.date);
+  document.getElementById('confirmSeats').textContent    = bookingData.seats.map(s => s.number).join(', ');
+  document.getElementById('confirmOperator').textContent = bookingData.trip.operator.name;
+}
+
+function formatDate(iso) {
+  if (!iso) return '';
+  const d = new Date(iso + 'T00:00:00');
+  return d.toLocaleDateString('en-IN', { weekday:'short', day:'numeric', month:'short', year:'numeric' });
+}
+
+function showToast(msg, type='') {
+  let c = document.querySelector('.toast-container');
+  if (!c) { c = document.createElement('div'); c.className='toast-container'; document.body.appendChild(c); }
+  const t = document.createElement('div');
+  t.className=`toast ${type}`; t.textContent=msg; c.appendChild(t);
+  setTimeout(()=>{ t.style.animation='slideOutRight 0.3s forwards'; setTimeout(()=>t.remove(),300); }, 3000);
+}
+
+init();
+</script>
+</body>
+</html>
